@@ -8,6 +8,7 @@ class RegistrationForm extends Component {
     lastName: '',
     showFirstNameError: false,
     showLastNameError: false,
+    isFormSubmitted: false,
   }
 
   onChangeFirstName = event => {
@@ -26,16 +27,16 @@ class RegistrationForm extends Component {
 
   onBlurLastName = () => {
     const {lastName} = this.state
-    const isValidFirstName = lastName === ''
-    this.setState({showFirstNameError: isValidFirstName})
+    const isValidLastName = lastName === ''
+    this.setState({showFirstNameError: isValidLastName})
   }
 
   getNewResponse = () => {
-    this.setState({
-      firstName: '',
-      lastName: '',
-      showFirstNameError: false,
-      showLastNameError: false,
+    this.setState({isFormSubmitted : false,
+        firstName: '',
+        lastName: '',
+        showFirstNameError: false,
+        showLastNameError: false
     })
   }
 
@@ -47,27 +48,11 @@ class RegistrationForm extends Component {
     } else if (lastName === '') {
       this.setState({showLastNameError: true})
     } else {
-      return (
-        <div className="result-container">
-          <img
-            src="https://assets.ccbp.in/frontend/react-js/success-icon-img.png"
-            alt="success"
-            className="success"
-          />
-          <p className="heading">Submitted Successfully</p>
-          <button
-            type="button"
-            className="button"
-            onClick={this.getNewResponse}
-          >
-            Submit Another Response
-          </button>
-        </div>
-      )
+      this.setState({isFormSubmitted : true})
     }
   }
 
-  render() {
+  renderRegistrationForm = () => {
     const {
       firstName,
       lastName,
@@ -109,6 +94,31 @@ class RegistrationForm extends Component {
           </button>
         </form>
       </div>
+    )
+  }
+
+  renderSuccess = () => (
+      <div className="result-container">
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/success-icon-img.png"
+            alt="success"
+            className="success"
+          />
+          <p className="heading">Submitted Successfully</p>
+          <button
+            type="button"
+            className="button"
+            onClick={this.getNewResponse}
+          >
+            Submit Another Response
+          </button>
+        </div>
+  )
+
+  render() {
+    const {isFormSubmitted } = this.state
+    return (
+      { isFormSubmitted ? (this.renderSuccess()) : (this.renderRegistrationForm())}
     )
   }
 }
